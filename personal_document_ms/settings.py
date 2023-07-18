@@ -41,7 +41,6 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken',
     'drf_spectacular',
     'drf_spectacular_sidecar',
 ]
@@ -149,7 +148,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        #'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': (
