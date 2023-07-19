@@ -1,8 +1,5 @@
-from django.http import HttpResponse, FileResponse, HttpResponseForbidden
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import generics, status
+from django.http import FileResponse
+from rest_framework import generics, status, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Document
@@ -14,6 +11,8 @@ class DocumentListCreateView(generics.ListCreateAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsAuthenticated,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ['title', 'description', 'file_format', 'created_at']
 
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
@@ -40,7 +39,7 @@ class DocumentShareView(generics.UpdateAPIView):
 class DocumentDownloadView(generics.RetrieveAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    pagination_classes = [IsAuthenticated]
+    pagination_classes = [IsAuthenticated,]
 
     def get(self, request, *args, **kwargs):
         document = self.get_object()
