@@ -15,3 +15,10 @@ class Document(TimeStamp):
     def save(self, *args, **kwargs):
         self.file_format = get_file_format(self.file)
         super(Document, self).save(*args, **kwargs)
+    
+    def can_be_downloaded_by_user(self, user):
+        if user.is_superuser:
+            return True
+        elif self.owner == user or self.shared_with.filter(pk=user.pk).exists():
+            return True
+        return False
