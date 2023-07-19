@@ -5,7 +5,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import Document
 from .serializers import DocumentSerializer
-from personal_document_ms.permissions import IsAdminOrReadOnly
+from personal_document_ms.permissions import IsAdminOrReadOnly, IsOwnerOrAdminOnly
 
 class DocumentListCreateView(generics.ListCreateAPIView):
     queryset = Document.objects.all()
@@ -16,4 +16,11 @@ class DocumentListCreateView(generics.ListCreateAPIView):
         return serializer.save(owner=self.request.user)
     
     def get_queryset(self):
+        if self.request.user.role == 1:
+            return super().get_queryset()
         return super().get_queryset().filter(owner=self.request.user)
+    
+class DocumentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+    permission_classes = (IsAuthenticated, IsOwnerOrAdminOnly)
