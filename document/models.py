@@ -6,6 +6,7 @@ from .utils import validate_file, get_file_format
 # Create your models here.
 class Document(TimeStamp):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="document_owner")
+    shared_with = models.ManyToManyField(User, related_name='shared_documents')
     title = models.CharField(max_length=100)
     file_format = models.CharField(max_length=50)
     description = models.TextField()

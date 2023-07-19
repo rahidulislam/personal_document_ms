@@ -4,8 +4,8 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import Document
-from .serializers import DocumentSerializer
-from personal_document_ms.permissions import IsAdminOrReadOnly, IsOwnerOrAdminOnly
+from .serializers import DocumentSerializer,DocumentShareSerializer
+from personal_document_ms.permissions import IsOwner, IsOwnerOrAdminOnly
 
 class DocumentListCreateView(generics.ListCreateAPIView):
     queryset = Document.objects.all()
@@ -24,3 +24,9 @@ class DocumentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsAuthenticated, IsOwnerOrAdminOnly)
+
+class DocumentShareView(generics.UpdateAPIView):
+    queryset = Document.objects.all()
+    serializer_class = DocumentShareSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+    http_method_names = ('patch',)

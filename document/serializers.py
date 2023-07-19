@@ -11,3 +11,8 @@ class DocumentSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data["format"] = instance.file_format
         return data
+    
+class DocumentShareSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = ('shared_with',)
