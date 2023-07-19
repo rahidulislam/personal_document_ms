@@ -1,9 +1,12 @@
 from django.http import FileResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from account.models import User
 from .models import Document
-from .serializers import DocumentSerializer, DocumentShareSerializer
+from .serializers import DocumentSerializer, DocumentShareSerializer, DocumentShareUserSerializer
 from personal_document_ms.permissions import IsOwner, IsOwnerOrAdminOnly
 
 
@@ -35,6 +38,20 @@ class DocumentShareView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsOwner]
     http_method_names = ('patch',)
 
+    def update(self, request, *args, **kwargs):
+        document = self.get_object()
+        shared_with_ids = self.request.data.get('shared_with', [])
+        document.shared_with.add(*shared_with_ids)
+        return Response('This document has been shared successfully', status.HTTP_200_OK)
+
+class DocumentSharedWithUserView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DocumentShareUserSerializer
+
+    def get_queryset(self): 
+        document = get_object_or_404(Document, pk=self.kwargs['pk'])
+        # shared_user_ids = 
+        return User.objects.filter(id__in=document.shared_with.values_list('id',flat=True))
 
 class DocumentDownloadView(generics.RetrieveAPIView):
     queryset = Document.objects.all()

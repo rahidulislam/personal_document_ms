@@ -43,3 +43,4 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(TokenObtainPairSerializer):
     username_field = 'username'
+
