@@ -1,7 +1,7 @@
 # personal_document_ms
 
 ## create virtual environment
-cd personal_document_ms
+cd personal_document_ms\
 python3 -m venv venv
 
 ## activate virtual environment
@@ -11,7 +11,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 ## run make migrations and migrate
-python manage.py makemigrations
+python manage.py makemigrations\
 python manage.py migrate
 
 ## run server
