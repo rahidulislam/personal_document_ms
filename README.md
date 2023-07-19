@@ -17,3 +17,6 @@
 # run server
 **python manage.py runserver**
 
+# Import API Collection in Insomnia Rest Client.
+`Application > Preferences > Data > Import Data`
+
